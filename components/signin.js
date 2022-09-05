@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Alert, Button, TextInput, View, StyleSheet, Text, TouchableWithoutFeedback, ListViewBase} from 'react-native'
-// import {Link} from 'react-router-dom';
 import {Signup} from './signup';
 
 export class Signin extends Component {
