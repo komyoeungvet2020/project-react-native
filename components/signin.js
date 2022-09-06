@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, Button, TextInput, View, StyleSheet, Text, TouchableWithoutFeedback, ListViewBase} from 'react-native'
-import {Signup} from './signup';
+import { Alert, Button, TextInput, View, StyleSheet, Text} from 'react-native'
 
 export class Signin extends Component {
   constructor(props) {
@@ -44,9 +43,6 @@ export class Signin extends Component {
           style={styles.input}
           onPress={this.onLogin.bind(this)}
         />
-        {/* <Link to="/signup" variant = "body2">
-        Not have an account ? Sign up here 
-       </Link> */}
       </View>
     );
   }
