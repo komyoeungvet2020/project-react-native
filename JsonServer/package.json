@@ -1,0 +1,17 @@
+{
+  "name": "jsonserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "api": "json-server db.json -p 3030 --delay 1500",
+    "tunnel":"ngrok http 3000"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "json-server": "^0.16.1",
+    "ngrok": "^4.0.1",
+    "api": "^4.5.2"
+  }
+}
