@@ -24,7 +24,7 @@ console.log(name)
             onPress={onEdit}
             icon="edit"
             style={{ marginHorizontal: 16 }} />
-          <Button onPress={onDelete} icon='movie' />
+          <Button onPress={onDelete} icon='trash' />
         </View>
       </View>
     </Card>
