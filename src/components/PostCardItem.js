@@ -1,30 +1,30 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { Card } from 'react-native-paper';
-//import { Feather } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const Button = ({ onPress, style, icon }) => (
   <TouchableOpacity style={style} onPress={onPress}>
-   {/*<Feather name={icon} size={24} />*/}
-    <Text>Add</Text>
+   <Icon name={icon} size={24} />
   </TouchableOpacity>
 )
 
-export default function PostCardItem({ title, author, onEdit, onDelete }) {
-console.log(title)
+export default function PostCardItem({ name, amount, description, onEdit, onDelete }) {
+console.log(name)
   return (
     <Card style={styles.item}>
       <View style={styles.rowView}>
         <View>
-          <Text style={styles.title}>{title}</Text>
-          <Text>Author: {author}</Text>
+          <Text style={styles.name}>{name}</Text>
+          <Text>Price: {amount}</Text>
+          <Text>Description: {description}</Text>
         </View>
         <View style={styles.rowView}>
           <Button
             onPress={onEdit}
             icon="edit"
             style={{ marginHorizontal: 16 }} />
-          <Button onPress={onDelete} icon='trash-2' />
+          <Button onPress={onDelete} icon='movie' />
         </View>
       </View>
     </Card>
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     elevation: 4,
     borderRadius: 8
   },
-  title: {
+  name: {
     fontSize: 18,
   },
 })

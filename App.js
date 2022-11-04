@@ -5,7 +5,6 @@ import { Surface, Title, TextInput } from 'react-native-paper';
 import ModalView from './src/components/ModalView';
 import PostCardItem from './src/components/PostCardItem';
 
-// update this url -> "<new_ngrok_host_url>/posts"
 const url = 'http://localhost:3030/data'
 
 const headers = {
@@ -16,32 +15,31 @@ const headers = {
 export default function App() {
   const [data, setData] = useState([]);
   const [visible, setVisible] = useState(false);
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [amount, setAmount] = useState(0);
   const [postId, setPostId] = useState(0);
   const [loading, setLoading] = useState(false);
 
   const getPosts = async () => {
-
-    console.log(url);
     setLoading(true)
     await fetch(url)
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
         setData(res);
       })
       .catch(e => console.log(e))
     setLoading(false)
   }
 
-  const addPost = (title, author) => {
+  const addPost = (name, amount ,description) => {
     fetch(url, {
       method: "POST",
       headers,
       body: JSON.stringify({
-        "author": author,
-        "title": title,
+        "amount": amount,
+        "name": name,
+        "description": description
       })
     }).then((res) => res.json())
       .then(resJson => {
@@ -50,13 +48,14 @@ export default function App() {
       }).catch(e => { console.log(e) })
   }
 
-  const editPost = (postId, title, author) => {
+  const editPost = (postId, name, amount,description) => {
     fetch(url + `/${postId}`, {
       method: "PUT",
       headers,
       body: JSON.stringify({
-        "author": author,
-        "title": title,
+        "amount": amount,
+        "name": name,
+        "description": description
       })
     }).then((res) => res.json())
       .then(resJson => {
@@ -79,16 +78,18 @@ export default function App() {
   const updatePost = () => {
     getPosts()
     setVisible(false);
-    setAuthor('')
-    setTitle('')
+    setAmount(0)
+    setName('')
+    setDescription('')
     setPostId(0)
   }
 
-  const edit = (id, title, author) => {
+  const edit = (id, name, amount,description) => {
     setVisible(true)
     setPostId(id)
-    setTitle(title)
-    setAuthor(author)
+    setName(name)
+    setAmount(amount)
+    setDescription(description)
   }
 
   useEffect(() => {
@@ -99,9 +100,9 @@ export default function App() {
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
       <Surface style={styles.header}>
-        <Title>Posts</Title>
+        <Title>Produsts</Title>
         <TouchableOpacity style={styles.button} onPress={() => setVisible(true)}>
-          <Text style={styles.buttonText}>Add Post</Text>
+          <Text style={styles.buttonText}>Create</Text>
         </TouchableOpacity>
       </Surface>
       <FlatList
@@ -111,36 +112,43 @@ export default function App() {
         onRefresh={getPosts}
         renderItem={({ item }) => (
           <PostCardItem
-            title={item.title}
-            author={item.author}
-            onEdit={() => edit(item.id, item.title, item.author)}
+            name={item.name}
+            amount={item.amount}
+            description={item.description}
+            onEdit={() => edit(item.id, item.name, item.amount, item.description)}
             onDelete={() => deletePost(item.id)}
           />
         )}
       />
    <ModalView
         visible={visible}
-        title="Add Post"
+        name="Add Post"
         onDismiss={() => setVisible(false)}
         onSubmit={() => {
-          if (postId && title && author) {
-            editPost(postId, title, author)
+          if (postId && name && amount) {
+            editPost(postId, name, amount,description)
           } else {
-            addPost(title, author)
+            addPost(name, amount,description)
           }
         }}
         cancelable
       >
         <TextInput
-          label="Title"
-          value={title}
-          onChangeText={(text) => setTitle(text)}
+          label="Name"
+          value={name}
+          onChangeText={(text) => setName(text)}
           mode="outlined"
         />
         <TextInput
-          label="Author"
-          value={author}
-          onChangeText={(text) => setAuthor(text)}
+          label="Price"
+          value={amount}
+          onChangeText={(text) => setAmount(text)}
+          mode="outlined"
+        />
+         <TextInput
+          label="Description"
+          value={description}
+          onChangeText={(text) => setDescription(text)}
           mode="outlined"
         />
       </ModalView>
