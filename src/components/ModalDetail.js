@@ -2,7 +2,7 @@ import React from "react";
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Title } from "react-native-paper";
 
-const ModalView = ({ children, title, onSubmit, cancelable, visible = false, onDismiss, submitText = "Ok", cancelText = "Cancel"}) => {
+const ModalDetail = ({ children, title, cancelable, visible = false, onDismiss, cancelText = "Cancel"}) => {
     return (
         <Modal
             animationType="fade"
@@ -21,11 +21,6 @@ const ModalView = ({ children, title, onSubmit, cancelable, visible = false, onD
                             style={{ ...styles.button, backgroundColor: 'white' }}
                             onPress={onDismiss}>
                             <Text style={[styles.textStyle, { color: '#f44' }]}>{cancelText}</Text>
-                        </TouchableOpacity>)}
-                        {onSubmit && (<TouchableOpacity
-                            style={styles.button}
-                            onPress={onSubmit}>
-                            <Text style={styles.textStyle}>{submitText}</Text>
                         </TouchableOpacity>)}
                     </View>
                 </View>
@@ -73,4 +68,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default ModalView
+export default ModalDetail

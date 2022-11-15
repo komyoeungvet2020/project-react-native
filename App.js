@@ -1,7 +1,8 @@
 import { StatusBar, } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, SafeAreaView, Platform } from 'react-native';
+import { FlatList, StyleSheet, Text, TouchableOpacity, SafeAreaView, Platform } from 'react-native';
 import { Surface, Title, TextInput } from 'react-native-paper';
+import ModalDetail from './src/components/ModalDetail';
 import ModalView from './src/components/ModalView';
 import PostCardItem from './src/components/PostCardItem';
 
@@ -15,10 +16,11 @@ const headers = {
 export default function App() {
   const [data, setData] = useState([]);
   const [visible, setVisible] = useState(false);
+  const [detail, setDetail] = useState(false);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState(0);
-  const [postId, setPostId] = useState(0);
+  const [productId, setProductId] = useState(0);
   const [loading, setLoading] = useState(false);
 
   const getPosts = async () => {
@@ -33,6 +35,10 @@ export default function App() {
   }
 
   const addPost = (name, amount ,description) => {
+      // const fileToUpload = singleFile;
+      // const data = new FormData();
+      // data.append('image', 'Image Upload');
+      // data.append('file_attachment', fileToUpload);
     fetch(url, {
       method: "POST",
       headers,
@@ -40,7 +46,8 @@ export default function App() {
         "amount": amount,
         "name": name,
         "description": description
-      })
+      }),
+      // body:data
     }).then((res) => res.json())
       .then(resJson => {
         console.log('post:', resJson)
@@ -48,8 +55,8 @@ export default function App() {
       }).catch(e => { console.log(e) })
   }
 
-  const editPost = (postId, name, amount,description) => {
-    fetch(url + `/${postId}`, {
+  const editPost = (productId, name, amount,description) => {
+    fetch(url + `/${productId}`, {
       method: "PUT",
       headers,
       body: JSON.stringify({
@@ -64,8 +71,8 @@ export default function App() {
       }).catch(e => { console.log(e) })
   }
 
-  const deletePost = (postId) => {
-    fetch(url + `/${postId}`, {
+  const deletePost = (productId) => {
+    fetch(url + `/${productId}`, {
       method: "DELETE",
       headers,
     }).then((res) => res.json())
@@ -81,12 +88,19 @@ export default function App() {
     setAmount(0)
     setName('')
     setDescription('')
-    setPostId(0)
+    setProductId(0)
   }
 
   const edit = (id, name, amount,description) => {
     setVisible(true)
-    setPostId(id)
+    setProductId(id)
+    setName(name)
+    setAmount(amount)
+    setDescription(description)
+  }
+  const view = (id, name, amount,description) => {
+    setDetail(true)
+    setProductId(id)
     setName(name)
     setAmount(amount)
     setDescription(description)
@@ -116,17 +130,18 @@ export default function App() {
             amount={item.amount}
             description={item.description}
             onEdit={() => edit(item.id, item.name, item.amount, item.description)}
+            onView={() => view(item.id, item.name, item.amount, item.description)}
             onDelete={() => deletePost(item.id)}
           />
         )}
       />
    <ModalView
         visible={visible}
-        name="Add Post"
+        name="Add Product"
         onDismiss={() => setVisible(false)}
         onSubmit={() => {
-          if (postId && name && amount) {
-            editPost(postId, name, amount,description)
+          if (productId && name && amount) {
+            editPost(productId, name, amount,description)
           } else {
             addPost(name, amount,description)
           }
@@ -152,6 +167,15 @@ export default function App() {
           mode="outlined"
         />
       </ModalView>
+      <ModalDetail
+        visible={detail}
+        onDismiss={() => setDetail(false)}
+        cancelable
+      >
+        <Text style={styles.name}>{name}</Text>
+        <Text>Price: {amount}</Text>
+        <Text>Description: {description}</Text>
+      </ModalDetail>
     </SafeAreaView>
   );
 }
@@ -177,5 +201,8 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white'
+  },
+  name: {
+    fontSize: 18,
   },
 });
