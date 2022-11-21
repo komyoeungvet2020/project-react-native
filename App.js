@@ -35,10 +35,6 @@ export default function App() {
   }
 
   const addPost = (name, amount ,description) => {
-      // const fileToUpload = singleFile;
-      // const data = new FormData();
-      // data.append('image', 'Image Upload');
-      // data.append('file_attachment', fileToUpload);
     fetch(url, {
       method: "POST",
       headers,
